@@ -1,14 +1,16 @@
-import React from "react";
-
 import Button from "@components/Button/Button";
-
-const NoResults = () => {
+export type NoResultsProps = {
+  onReset: React.MouseEventHandler<HTMLButtonElement>;
+};
+const NoResults: React.FC<NoResultsProps> = ({ onReset }) => {
   return (
     <div className="noresults">
       <div className="noresults__txt">
         Your search did not match any results.
       </div>
-      <Button background="green">Reset</Button>
+      <Button onClick={onReset} background="green">
+        Reset
+      </Button>
     </div>
   );
 };

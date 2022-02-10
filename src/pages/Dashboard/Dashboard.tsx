@@ -4,12 +4,14 @@ import React, { useEffect, useState } from "react";
 import Button from "@components/Button/Button";
 import Card from "@components/Card/Card";
 import Input from "@components/Input/Input";
+import Skeleton from "@components/Skeleton/Skeleton";
 import SortBtn from "@components/SortBtn/SortBtn";
 import { sortBy } from "@utils/sort";
+import "@styles/style.scss";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { SiteData, TestData } from "src/data/types";
 
-import "@styles/style.scss";
 import NoResults from "./NoResults";
 
 const Dashboard: React.FC = () => {
@@ -23,10 +25,12 @@ const Dashboard: React.FC = () => {
     const SiteAPI = `http://localhost:3100/sites/`;
     const getTestAPI = axios.get(TestAPI);
     const getSiteAPI = axios.get(SiteAPI);
+    setIsLoading(true);
     axios.all([getTestAPI, getSiteAPI]).then(
       axios.spread((...allData) => {
         const allDataTest = allData[0].data;
         const allDataSites = allData[1].data;
+        setIsLoading(false);
         setItems(allDataTest);
         setSite(allDataSites);
       })
@@ -55,6 +59,10 @@ const Dashboard: React.FC = () => {
     sort ? items.sort(sortBy(str)) : items.sort(sortBy(str)).reverse();
   };
 
+  const handelReset = () => {
+    fetchData();
+    setSearchItem("");
+  };
   return (
     <div>
       <Input
@@ -62,7 +70,12 @@ const Dashboard: React.FC = () => {
         countTest={items.length}
         value={searchItem}
       />
-
+      <SortBtn
+        onSortName={() => handelSort("name")}
+        onSortType={() => handelSort("type")}
+        onSortStatus={() => handelSort("status")}
+        onSortSite={() => handelSort("site")}
+      />
       {items.length > 1 && items ? (
         items.map((item) => {
           var status = "";
@@ -106,15 +119,21 @@ const Dashboard: React.FC = () => {
                   </div>
                 ))}
               {item.status === "DRAFT" ? (
-                <Button background={background}>Finalize</Button>
+                <Link to={`/Finalize/${item.id}`}>
+                  <Button background={background}>Finalize</Button>
+                </Link>
               ) : (
-                <Button background={background}>Results</Button>
+                <Link to={`/Results/${item.id}`}>
+                  <Button background={background}>Results</Button>
+                </Link>
               )}
             </Card>
           );
         })
+      ) : isLoading ? (
+        <Skeleton />
       ) : (
-        <NoResults />
+        <NoResults onReset={handelReset} />
       )}
     </div>
   );

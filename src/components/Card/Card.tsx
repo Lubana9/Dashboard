@@ -1,7 +1,4 @@
-import { Children } from "react";
-
-import Button from "@components/Button/Button";
-import { SiteData, TestData } from "src/data/types";
+import { TestData } from "src/data/types";
 export type CardProps = {
   dataTest: TestData;
   children: React.ReactNode;

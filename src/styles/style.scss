@@ -26,6 +26,10 @@ body {
   font-size: 14px;
   margin: 41px 50px;
 }
+a {
+  text-decoration: none;
+  color: $clr--primary;
+}
 ::placeholder {
   color: $clr--txt-input;
   overflow: hidden;
@@ -37,8 +41,7 @@ body {
   border: 1px solid $clr--border;
   padding: 10px 20px;
   border-radius: 15px;
-  &__icon {
-  }
+
   &__field {
     outline: 0;
     border: 0;
@@ -113,6 +116,7 @@ body {
   color: #ffff;
   font-size: 12px;
   padding: 5px 20px;
+  cursor: pointer;
   &__green {
     background-color: $clr--green;
   }
@@ -185,5 +189,63 @@ body {
     font-size: 18px;
     align-items: center;
     cursor: pointer;
+  }
+}
+
+/*Loader*/
+@keyframes skeleton-animation {
+  0% {
+    right: 100%;
+  }
+
+  50% {
+    right: -128px;
+  }
+
+  100% {
+    right: 100%;
+  }
+}
+
+.skeleton {
+  overflow: hidden;
+  width: 100%;
+  height: 78px;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 8px;
+  position: relative;
+  margin-top: 20px;
+
+  &:before {
+    display: block;
+    position: absolute;
+    width: 128px;
+    height: 20px;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0),
+      #fff,
+      rgba(255, 255, 255, 0)
+    );
+    content: "";
+    animation: skeleton-animation 1.25s infinite;
+  }
+
+  .s-line {
+    height: 20px;
+    background: #eee;
+
+    &.first {
+      width: 100%;
+    }
+
+    &.second {
+      width: 75%;
+    }
+
+    &.third {
+      width: 50%;
+    }
   }
 }
